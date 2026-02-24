@@ -231,27 +231,36 @@ Faites preuve de pédagogie et soyez clair dans vos explications et procedures d
 **Exercice 1 :**  
 Quels sont les composants dont la perte entraîne une perte de données ?  
   
-*..Répondez à cet exercice ici..*
+- PVC pra-data → contient la base SQLite.
+- Si le PVC ou son volume physique est perdu et qu’il n’y a pas de backup, perte de données totale.
+- Les pods peuvent être détruits sans perte grâce au PVC persistant.
 
 **Exercice 2 :**  
 Expliquez nous pourquoi nous n'avons pas perdu les données lors de la supression du PVC pra-data  
-  
-*..Répondez à cet exercice ici..*
+
+- Le PVC pra-data est indépendant du pod.
+- Kubernetes recrée le pod et remonte le même volume, les données sont intactes.
 
 **Exercice 3 :**  
 Quels sont les RTO et RPO de cette solution ?  
   
-*..Répondez à cet exercice ici..*
+- RTO (Recovery Time Objective) : temps pour remettre le service → ~1 min (redémarrage pod + port forward)
+- RPO (Recovery Point Objective) : quantité de données perdues → <1 min (backup chaque minute)
 
 **Exercice 4 :**  
 Pourquoi cette solution (cet atelier) ne peux pas être utilisé dans un vrai environnement de production ? Que manque-t-il ?   
   
-*..Répondez à cet exercice ici..*
+- Pas de réplication multi-nœud ni cloud → vulnérable si le stockage local perd.
+- BDD SQLite non distribuée → pas adaptée pour de la prod.
+- Aucun monitoring ni haute disponibilité avancée.
   
 **Exercice 5 :**  
 Proposez une archtecture plus robuste.   
   
-*..Répondez à cet exercice ici..*
+- Utiliser PostgreSQL ou MySQL en cluster pour HA et réplication.
+- Stockage persistant sur cloud (EBS, GCE Persistent Disk, NFS).
+- Sauvegarde automatisée sur stockage externe (S3, GCS).
+- Déploiement multi-région pour PRA/PCA réel.
 
 ---------------------------------------------------
 Séquence 6 : Ateliers  
