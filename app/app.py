@@ -90,9 +90,13 @@ def count():
 
 @app.route("/status")
 def status():
-    # compter messages
-    from app.db import get_count  # suppose que vous avez une fonction get_count()
-    count = get_count()
+    init_db()
+
+    # compter les événements
+    conn = get_conn()
+    cur = conn.execute("SELECT COUNT(*) FROM events")
+    count = cur.fetchone()[0]
+    conn.close()
 
     # dernier backup
     backups = sorted(glob.glob("/backup/*.db"), reverse=True)
