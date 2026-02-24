@@ -7,7 +7,7 @@
     cluster_name: pra
     namespace: pra
     image: pra/flask-sqlite:1.1
-    do_restore: true   # mets true pour faire un restore automatiquement
+    do_restore: false   # mets true pour faire un restore automatiquement
 
   tasks:
     - name: Check k3d is installed
