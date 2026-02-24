@@ -1,4 +1,4 @@
-import os
+import os, glob, time
 import sqlite3
 from datetime import datetime
 from flask import Flask, jsonify, request
@@ -87,6 +87,23 @@ def count():
     conn.close()
 
     return jsonify(count=n)
+
+@app.route("/status")
+def status():
+    # compter messages
+    from app.db import get_count  # suppose que vous avez une fonction get_count()
+    count = get_count()
+
+    # dernier backup
+    backups = sorted(glob.glob("/backup/*.db"), reverse=True)
+    last_file = backups[0] if backups else None
+    age = int(time.time() - os.path.getmtime(last_file)) if last_file else None
+
+    return jsonify({
+        "count": count,
+        "last_backup_file": os.path.basename(last_file) if last_file else None,
+        "backup_age_seconds": age
+    })
 
 # ---------- Main ----------
 if __name__ == "__main__":
